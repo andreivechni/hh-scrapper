@@ -34,11 +34,13 @@ async function getVacLinks(lastPage) {
 }
 
 async function getVacBody(link) {
+
     let vacBody = await rp({
         jar: true,
         uri: link
     });
-    let $ = cheerio.load(vacBody);
+    let $ = cheerio.load(vacBody, { decodeEntities: false });
+
     return {
         header: $('h1[class=header]').text(),
         body: $('.vacancy-description').text()
@@ -46,6 +48,7 @@ async function getVacBody(link) {
 }
 
 async function HHgetVacs() {
+
     try {
         let lastPage = await getLastPage();
         let vacLinks = await getVacLinks(lastPage);
@@ -53,6 +56,7 @@ async function HHgetVacs() {
         for (let vac of vacLinks) {
             vacObjects.push(await getVacBody(vac));
         }
+        console.log('scrapper done...');
         return vacObjects;
     }
     catch (e) {
@@ -60,21 +64,4 @@ async function HHgetVacs() {
     }
 }
 
-HHgetVacs().then(vacs => {
-    console.log(vacs);
-});
-
 module.exports.HHgetVacs = HHgetVacs;
-
-/*getLastPage()
-    .then(lastPage => {
-        return getVacLinks(lastPage);
-    })
-    .then(async vacancies => {
-        let vacObjs = [];
-        for (let i of vacancies) {
-            vacObjs.push(await getVacBody(i));
-        }
-        return vacObjs;
-    })
-    .catch((err) => { console.dir(err); });*/
