@@ -43,7 +43,8 @@ async function getVacBody(link) {
 
     return {
         header: $('h1[class=header]').text(),
-        body: $('.vacancy-description').text()
+        body: $('.vacancy-description').text(),
+        link: link
     };
 }
 

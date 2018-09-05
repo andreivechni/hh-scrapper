@@ -5,10 +5,37 @@ html
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous")
-        link(href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet")
+        link(href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300"
+        rel="stylesheet")
         link(rel='stylesheet'
         href='css/main.css')
         meta(charset='utf-8')
     body
         form
             button(type="submit" formaction='/refreshVacs')= "Обновить список вакансий"
+        ul
+            each vac in vacs
+                li
+                    h5= vac.header
+                    p= vac.body
+                    p
+                        a(href=`${vac.link}`)=`${vac.link}`
+        ul(class='d-flex justify-content-between' style="list-style-type: none; width: 300px")
+            li
+                a(href=`/vacs/${0}` style="padding: 0 15px")=`${1}`
+
+            - var oCnt = 0
+            - if (curPage > 2)
+                li
+                    p(style="padding: 0 15px")='...'
+            - for (var i = curPage - 2; i < pagesCount; i++)
+                - if (i >= 2 && i <= curPage)
+                    a(href=`/vacs/${i - 1}` style="padding: 0 15px")=`${i}`
+                - if (i > curPage && i - curPage <= 2)
+                    - oCnt++
+                    a(href=`/vacs/${i - 1}` style="padding: 0 15px")=`${i}`
+            - if (pagesCount - oCnt >= 2)
+                li
+                    p(style="padding: 0 15px")='...'
+            li
+                a(href=`/vacs/${pagesCount - 1}` style="padding: 0 15px")=`${pagesCount}`
